@@ -79,7 +79,7 @@ public class OmokGui extends JFrame implements MouseListener{
 
 	public void gameEnd(){
 		System.out.println("Game End");
-		JOptionPane.showMessageDialog(this, (game.whoIsTurnIsIt() == 1 ? "White" : "Black") + " Win!", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, (game.whoIsTurnIsIt() == -1 ? "White" : "Black") + " Win!", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void circleDraw(Graphics g,int x,int y){

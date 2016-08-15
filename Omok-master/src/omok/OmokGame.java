@@ -21,6 +21,7 @@ public class OmokGame {
 	private void socketInit(){
     Scanner input = new Scanner(System.in);
     mySocket = new OmokSocket();
+//------------------------------------------------------------------------ should be upgrade
     System.out.println("if you want to be a host. just enter 1");
     if(input.nextInt() == 1){
       System.out.println("Enter port Number");
@@ -35,6 +36,7 @@ public class OmokGame {
         mySocket.beClient(ipNum, portNum);
         myTurn = false;
     }
+//----------------------------------------------------------------------should ve upgrade
   }
 
 	private void dataInit(int ver, int hor){
