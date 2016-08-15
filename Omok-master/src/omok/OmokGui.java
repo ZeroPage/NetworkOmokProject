@@ -14,13 +14,14 @@ import javax.swing.JPanel;
 class LinePanel extends JPanel{
 	protected int lineNum;
 	int x0, y0;
-	
+	boolean turn;
+
 	public LinePanel(int lineNum){
 		this.lineNum = lineNum;
 		this.x0 = 0;
 		this.y0 = 0;
 	}
-	
+
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		for(int i = 0; i<lineNum; i++){
@@ -31,16 +32,16 @@ class LinePanel extends JPanel{
 }
 
 public class OmokGui extends JFrame implements MouseListener{
-	Omok game;
+	OmokGame game;
 	protected int lineNum;
 	private LinePanel lp;
-	public OmokGui(int gLineNum) {
+	public OmokGui(int gLineNum, OmokData game) {
 		// TODO Auto-generated constructor stub
 		super("NeOP's Super Awesome Omok Game");
-		game = new Omok(gLineNum, gLineNum);
+		this.game = game;
 		this.lineNum = gLineNum++;
 		gLineNum *= 30;
-		
+
 		setVisible(true);
 		Container contain = getContentPane();
 		lp = new LinePanel(this.lineNum);
@@ -49,15 +50,19 @@ public class OmokGui extends JFrame implements MouseListener{
 		lp.addMouseListener(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-
 	}
-	
+
 	public void mousePressed(MouseEvent e){
+
+		if(!game.myTurn){
+			return;
+		}
+
 		int x, y, outerBoundary = 15 + lineNum * 30;
 		if(!game.isItend()){
 			x = e.getX() + 15;
 			y = e.getY() + 15;
-			
+
 			if(x < 15 || y < 15 || x >= outerBoundary || y >= outerBoundary) {
 				return;
 			}
@@ -65,22 +70,21 @@ public class OmokGui extends JFrame implements MouseListener{
 			y = (y - (y % 30)) / 30;
 			//System.out.println(x + " " + y);
 			//System.out.println("a");
-			if(!game.put(x, y)){
-				return;
-			}
-			circleDraw(lp.getGraphics(), x * 30 - 15, y * 30 - 15);
-			if(game.isItend()){
-				this.gameEnd();
-			}
+			game.put(x, y)
 		}
 	}
-	
+	public void put(int x, int y){
+		circleDraw(lp.getGraphics(), x, y);
+	}
+
 	public void gameEnd(){
 		System.out.println("Game End");
 		JOptionPane.showMessageDialog(this, (game.whoIsTurnIsIt() == 1 ? "White" : "Black") + " Win!", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-	public void circleDraw(Graphics g,int x,int y){
+
+	private void circleDraw(Graphics g,int x,int y){
+		x = x * 30 - 15;
+		y = y * 30 - 15;
 		if(game.whoIsTurnIsIt() == 1){
 			g.setColor(Color.WHITE);
 		}
@@ -92,24 +96,24 @@ public class OmokGui extends JFrame implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
