@@ -35,7 +35,7 @@ public class OmokGui extends JFrame implements MouseListener{
 	OmokGame game;
 	protected int lineNum;
 	private LinePanel lp;
-	public OmokGui(int gLineNum, OmokData game) {
+	public OmokGui(int gLineNum, OmokGame game) {
 		// TODO Auto-generated constructor stub
 		super("NeOP's Super Awesome Omok Game");
 		this.game = game;
@@ -70,7 +70,7 @@ public class OmokGui extends JFrame implements MouseListener{
 			y = (y - (y % 30)) / 30;
 			//System.out.println(x + " " + y);
 			//System.out.println("a");
-			game.put(x, y)
+			game.put(x, y);
 		}
 	}
 	public void put(int x, int y){

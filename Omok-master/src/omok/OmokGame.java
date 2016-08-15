@@ -1,30 +1,31 @@
 package omok;
 
+import java.io.IOException;
 import java.util.Scanner;
 
-public class OmokData {
+public class OmokGame {
   protected OmokSocket mySocket;
-  OmokGUI gameGui;
+  OmokGui gameGui;
 	protected boolean end;
 	protected int[][] board; //0�̸� �ȵа� -1�̸� �浹, 1�̸� ����
 	protected int ver,hor;
 	protected int turn;
   public boolean myTurn;
 
-	public void OmokGame(int ver, int hor){
+	public OmokGame(){
     socketInit();
-		dataInit(ver,hor);
-    gameGui = new OmokGui(19);
+	dataInit(19,19);
+    gameGui = new OmokGui(19, this);
 	}
 
-	private void SocketInit(){
+	private void socketInit(){
     Scanner input = new Scanner(System.in);
     mySocket = new OmokSocket();
     System.out.println("if you want to be a host. just enter 1");
     if(input.nextInt() == 1){
       System.out.println("Enter port Number");
       mySocket.beServer(input.nextInt());
-      myTurn = ture;
+      myTurn = true;
     }
     else{
         System.out.println("Enter ServerIP");
@@ -63,18 +64,29 @@ public class OmokData {
 		board[x][y] = turn;
 		turn *= -1;
     myTurn = false;
-    mySocket.sender.writeInt(x);
-    mySocket.sender.writeInt(y);
-		if(WOL(x,y)){
-			end = true;
+    try{
+    	mySocket.sender.writeInt(x);
+    	mySocket.sender.writeInt(y);
+    }
+    catch(IOException ioex){
+    	System.out.println(ioex);
+    }
+	if(WOL(x,y)){
+		end = true;
       gameGui.gameEnd();
 		}
     otherPut();
 	}
 
   public void otherPut(){
-    x = mySocket.reciever.readInt();
-    y = mySocket.reciever.readInt();
+	  int x = 0, y = 0;
+	  try{
+		  x = mySocket.reciever.readInt();
+		  y = mySocket.reciever.readInt();
+	  }
+	  catch(IOException ioex){
+	  	System.out.println(ioex);
+	  }
     gameGui.put(x, y);
 		board[x][y] = turn;
 		turn *= -1;

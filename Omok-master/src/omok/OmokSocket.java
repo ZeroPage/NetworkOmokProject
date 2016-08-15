@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 
-public class mySocket {
+public class OmokSocket {
 	private ServerSocket myServerSocket;
 	private Socket mySocket;
 	public DataOutputStream sender;
@@ -16,14 +16,14 @@ public class mySocket {
 	private int portNum;
 	private  String serverIP;
 
-	public void OmokSocket() {
+	public OmokSocket() {
 
 	}
 
 	public void beServer(int portNum){
 		try{
 			myServerSocket = new ServerSocket(portNum);
-			mySocket = ServerSocket.accept();
+			mySocket = myServerSocket.accept();
 			sender = new DataOutputStream(mySocket.getOutputStream());
 			reciever = new DataInputStream(mySocket.getInputStream());
 		}
@@ -33,7 +33,7 @@ public class mySocket {
 	}
 
 	public void beClient(String serverIP, int portNum){
-		this.ServerIP = serverIP;
+		this.serverIP = serverIP;
 		try{
 			mySocket = new Socket(serverIP, portNum);
 			sender = new DataOutputStream(mySocket.getOutputStream());
