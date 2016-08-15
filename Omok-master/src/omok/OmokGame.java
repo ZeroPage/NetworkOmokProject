@@ -7,7 +7,7 @@ public class OmokGame {
   protected OmokSocket mySocket;
   OmokGui gameGui;
 	protected boolean end;
-	protected int[][] board; //0�̸� �ȵа� -1�̸� �浹, 1�̸� ����
+	protected int[][] board; //0 non, -1 white, 1 black
 	protected int ver,hor;
 	protected int turn;
   public boolean myTurn;
@@ -60,10 +60,10 @@ public class OmokGame {
 		if(board[x][y] != 0){
 			return;
 		}
-    gameGui.put(x, y);
 		board[x][y] = turn;
 		turn *= -1;
     myTurn = false;
+    gameGui.put(x, y);
     try{
     	mySocket.sender.writeInt(x);
     	mySocket.sender.writeInt(y);
