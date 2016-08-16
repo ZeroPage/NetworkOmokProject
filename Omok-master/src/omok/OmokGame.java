@@ -29,6 +29,7 @@ public class OmokGame {
       myTurn = true;
     }
     else{
+    	input = new Scanner(System.in);
         System.out.println("Enter ServerIP");
         String ipNum = input.nextLine();
         System.out.println("Enter portNum");
