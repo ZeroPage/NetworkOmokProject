@@ -13,9 +13,10 @@ public class OmokGame {
   public boolean myTurn;
 
 	public OmokGame(){
+	  dataInit(19,19);
     socketInit();
-	dataInit(19,19);
     gameGui = new OmokGui(19, this);
+    otherPut();
 	}
 
 	private void socketInit(){
@@ -67,6 +68,7 @@ public class OmokGame {
 		turn *= -1;
     myTurn = false;
     gameGui.put(x, y);
+
     try{
     	mySocket.sender.writeInt(x);
     	mySocket.sender.writeInt(y);
@@ -74,11 +76,12 @@ public class OmokGame {
     catch(IOException ioex){
     	System.out.println(ioex);
     }
-	if(WOL(x,y)){
-		end = true;
-      gameGui.gameEnd();
+
+	  if(WOL(x,y)){
+		    end = true;
+        gameGui.gameEnd();
 		}
-    otherPut();
+      otherPut();
 	}
 
   public void otherPut(){
