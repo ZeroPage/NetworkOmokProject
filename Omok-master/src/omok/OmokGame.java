@@ -11,19 +11,29 @@ public class OmokGame {
 	protected int ver,hor;
 	protected int turn;
   public boolean myTurn;
+  public boolean solo;
 
 	public OmokGame(){
 	  dataInit(19,19);
-    socketInit();
+    System.out.println("if you want solo play. just enter 1. otherwise enter the other key");
+    Scanner input = new Scanner(System.in);
+    if(input.nextInt() == 1){
+      solo = true;
+    }
+    if(!solo){
+      socketInit();
+    }
     gameGui = new OmokGui(19, this);
-    otherPut();
-	}
+    if(!solo){
+      otherPut();
+    }
+  }
 
 	private void socketInit(){
     Scanner input = new Scanner(System.in);
     mySocket = new OmokSocket();
 //------------------------------------------------------------------------ should be upgrade
-    System.out.println("if you want to be a host. just enter 1");
+    System.out.println("if you want to be a host. just enter 1. otherwise enter the other key");
     if(input.nextInt() == 1){
       System.out.println("Enter port Number");
       mySocket.beServer(input.nextInt());
@@ -68,20 +78,22 @@ public class OmokGame {
 		turn *= -1;
     myTurn = false;
     gameGui.put(x, y);
-
-    try{
-    	mySocket.sender.writeInt(x);
-    	mySocket.sender.writeInt(y);
+    if(!solo){
+      try{
+    	   mySocket.sender.writeInt(x);
+    	    mySocket.sender.writeInt(y);
+        }
+        catch(IOException ioex){
+      	System.out.println(ioex);
+      }
     }
-    catch(IOException ioex){
-    	System.out.println(ioex);
-    }
-
 	  if(WOL(x,y)){
 		    end = true;
         gameGui.gameEnd();
 		}
+    if(!solo){
       otherPut();
+    }
 	}
 
   public void otherPut(){

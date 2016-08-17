@@ -36,7 +36,7 @@ public class OmokGui extends JFrame{
 
 	public void gameEnd(){
 		System.out.println("Game End");
-		JOptionPane.showMessageDialog(this, (game.whoIsTurnIsIt() == -1 ? "White" : "Black") + " Win!", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, (game.whoIsTurnIsIt() == 1 ? "White" : "Black") + " Win!", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }

@@ -29,9 +29,11 @@ public class OmokBoard extends JPanel implements MouseListener{
 	}
 
   public void mousePressed(MouseEvent e){
-    if(!game.myTurn){
-			return;
-		}
+    if(!game.solo){
+      if(!game.myTurn){
+			    return;
+		  }
+    }
 		int x, y, outerBoundary = 15 + lineNum * 30;
 
 		if(!game.isItend()){
