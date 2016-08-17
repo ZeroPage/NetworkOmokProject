@@ -13,25 +13,24 @@ public class OmokGame {
   public boolean myTurn;
   public boolean solo;
 
-	public OmokGame(){
-	  dataInit(19,19);
-    System.out.println("if you want solo play. just enter 1. otherwise enter the other key");
-    Scanner input = new Scanner(System.in);
-    if(input.nextInt() == 1){
-      solo = true;
-    }
-    if(!solo){
-      socketInit();
-    }
-    gameGui = new OmokGui(19, this);
-    if(!solo){
-      otherPut();
-    }
-  }
-
-	private void socketInit(){
-    Scanner input = new Scanner(System.in);
-    mySocket = new OmokSocket();
+  public OmokGame(){
+	   dataInit(19,19);
+     System.out.println("if you want solo play. just enter 1. otherwise enter the other key");
+     Scanner input = new Scanner(System.in);
+     if(input.nextInt() == 1){
+       solo = true;
+     }
+     if(!solo){
+       socketInit();
+     }
+     gameGui = new OmokGui(19, this);
+     if(!solo && !myTurn){
+       otherPut();
+     }
+   }
+   private void socketInit(){
+     Scanner input = new Scanner(System.in);
+     mySocket = new OmokSocket();
 //------------------------------------------------------------------------ should be upgrade
     System.out.println("if you want to be a host. just enter 1. otherwise enter the other key");
     if(input.nextInt() == 1){
@@ -41,12 +40,12 @@ public class OmokGame {
     }
     else{
     	input = new Scanner(System.in);
-        System.out.println("Enter ServerIP");
-        String ipNum = input.nextLine();
-        System.out.println("Enter portNum");
-        int portNum = input.nextInt();
-        mySocket.beClient(ipNum, portNum);
-        myTurn = false;
+      System.out.println("Enter ServerIP");
+      String ipNum = input.nextLine();
+      System.out.println("Enter portNum");
+      int portNum = input.nextInt();
+      mySocket.beClient(ipNum, portNum);
+      myTurn = false;
     }
 //----------------------------------------------------------------------should ve upgrade
   }
@@ -80,10 +79,10 @@ public class OmokGame {
     gameGui.put(x, y);
     if(!solo){
       try{
-    	   mySocket.sender.writeInt(x);
-    	    mySocket.sender.writeInt(y);
-        }
-        catch(IOException ioex){
+    	  mySocket.sender.writeInt(x);
+    	  mySocket.sender.writeInt(y);
+      }
+      catch(IOException ioex){
       	System.out.println(ioex);
       }
     }
@@ -112,63 +111,64 @@ public class OmokGame {
     if(WOL(x,y)){
 			end = true;
       gameGui.gameEnd();
-		}
+	  }
   }
 
-	private boolean WOL(int x, int y){//������ �������� Ȯ���ϴ� �Լ�
-	    int[] ex = new int[2];
-	    int[] ey = new int[2];
-	    int i, a, b, k;
+	private boolean WOL(int x, int y){
+	  int[] ex = new int[2];
+	  int[] ey = new int[2];
+	  int i, a, b, k;
 
+    for (i = 0; i< 2; i++){
+	    ex[i] = x;
+	    ey[i] = y;
+	  }
+	  k = 1;
+
+	  for (b = -1; b < 2; b++){
+	    for (a = 0; a < 2; a++){
+	      for (i = 1; i < 5; i++){
+	        if (board[ex[a] + (-1)*k][ey[a] + b*k] == turn*(-1)){
+	          ex[a] = ex[a] + (-1)*k;
+	          ey[a] = ey[a] + b*k;
+	        }
+	        else{   break;  }
+	      } k = k*(-1);
+	    }
+	    if (ex[1] - ex[0] + 1 >= 5){
+	      return true;
+	    }
 	    for (i = 0; i< 2; i++){
-	        ex[i] = x;
-	        ey[i] = y;
-	    }
-	    k = 1;
+		    ex[i] = x;
+		    ey[i] = y;
+		  }
+		  k = 1;
+	  }
 
-	    for (b = -1; b < 2; b++){   //ey���� ��ȭ�� ����
-	        for (a = 0; a < 2; a++){ //ex,ey�� [0]�� [1] üũ([0]��[1]�� k�� �̿��Ͽ�  ���� �ݴ�  �������� üũ�մϴ�.)
-	            for (i = 1; i < 5; i++){ //�÷��̾ ���ڸ��κ��� �ѹ��⿡ �ִ� 4������ üũ
-	                if (board[ex[a] + (-1)*k][ey[a] + b*k] == turn*(-1)){//���� �����ų� ���뺴�� ���� ������ break
-	                    ex[a] = ex[a] + (-1)*k;
-	                    ey[a] = ey[a] + b*k;
-	                }
-	                else{   break;  }
-	            } k = k*(-1);   //�ݴ� ������ üũ�ϱ� ���� -1�� ����
-	        }
-	        if (ex[1] - ex[0] + 1 >= 5){//5�� �̻��̸� �¸�
-	            return true;
-	        }
-	        for (i = 0; i< 2; i++){
-		        ex[i] = x;
-		        ey[i] = y;
-		    }
-		    k = 1;
-	    }
+	  for (i = 0; i< 2; i++){
+	      ex[i] = x;
+	      ey[i] = y;
+	  }
+	  k = 1;
 
-	    for (i = 0; i< 2; i++){
-	        ex[i] = x;
-	        ey[i] = y;
-	    }
-	    k = 1;
+	  k = -1;
+	  for (a = 0; a < 2; a++){
+	      for (i = 1; i < 5; i++){
+	          if (board[ex[a]][ey[a] + k] == turn*(-1)){
+	              ex[a] = ex[a];
+	              ey[a] = ey[a] + k;
+	          }
+	          else{ break; }
+	      }
+	      k = k*-1;
+	  }
+	  if (ey[1] - ey[0] + 1 >= 5){
+	      return true;
+	  }
 
-	    k = -1;
-	    for (a = 0; a < 2; a++){    //x�� ��ȭ���� 0�̰� y�� ��ȭ���� ���� ����, �Ʒ��� �ڵ��� ���� ����
-	        for (i = 1; i < 5; i++){
-	            if (board[ex[a]][ey[a] + k] == turn*(-1)){
-	                ex[a] = ex[a];
-	                ey[a] = ey[a] + k;
-	            }
-	            else{ break; }
-	        }
-	        k = k*-1;
-	    }
-	    if (ey[1] - ey[0] + 1 >= 5){
-	        return true;
-	    }
-
-	    return false;
+	  return false;
 	}
+
 	public int whoIsTurnIsIt(){
 		return turn;
 	}
