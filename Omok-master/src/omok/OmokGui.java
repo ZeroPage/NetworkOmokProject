@@ -21,8 +21,6 @@ public class OmokGui extends JFrame{
 		this.lineNum = gLineNum++;
 		gameBoard = new OmokBoard(this.lineNum, game);
 		add(gameBoard, "Center");
-		add(new JButton("bv"), "West");
-		add(new JButton("bb"), "West");
 		setVisible(true);
 
 		gLineNum *= 30;
