@@ -104,10 +104,10 @@ public class OmokGame {
 	  catch(IOException ioex){
 	  	System.out.println(ioex);
 	  }
-    gameGui.put(x, y);
 		board[x][y] = turn;
 		turn *= -1;
     myTurn = true;
+    gameGui.put(x, y);
     if(WOL(x,y)){
 			end = true;
       gameGui.gameEnd();

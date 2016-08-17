@@ -10,7 +10,6 @@ public class OmokBoard extends JPanel implements MouseListener{
 	protected int lineNum;
   OmokGame game;
 	int x0, y0;
-	boolean turn;
 
 	public OmokBoard(int lineNum, OmokGame game){
     this.lineNum = lineNum;
