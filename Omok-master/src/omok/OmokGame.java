@@ -15,61 +15,87 @@ public class OmokGame {
   public boolean solo;
   private static final String[] answer = {"YES", "NO"};
 
-  public OmokGame(int lineNum){
-	   dataInit(lineNum,lineNum);
-     baseSettings();
-     gameGui = new OmokGui(lineNum, this);
-     if(!solo && !myTurn){
-       otherPut();
-     }
-   }
+  public OmokGame(int lineNum){//for now with Pane
+	  dataInit(lineNum);
+    baseSettingsWithPane();
+    gameGui = new OmokGui(lineNum, this);
+    if(!solo && !myTurn){
+      otherPut();
+    }
+  }
 
-   private void baseSettings(){
-     String input = (String) JOptionPane.showInputDialog(null, "if you want solo play. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
-     if(input.equals("YES")){
-       solo = true;
-     }
-     if(!solo){
-       socketInit();
-     }
-   }
+  public OmokGame(int lineNum, boolean solo){//for future solo mode
+	  dataInit(lineNum);
+    this.solo = solo;
+    gameGui = new OmokGui(lineNum, this);
+  }
 
-   private void socketInit(){
-     mySocket = new OmokSocket();
-     String input = (String) JOptionPane.showInputDialog(null, "if you want to be a host. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
-//------------------------------------------------------------------------ should be upgrade
+  public OmokGame(int lineNum, boolean host, int portNum, String ipNum){//for future multimode
+    dataInit(lineNum);
+    socketInit(host, portNum, ipNum);
+    gameGui = new OmokGui(lineNum, this);
+    if(!solo && !myTurn){
+      otherPut();
+    }
+  }
 
+  private void baseSettingsWithPane(){
+    String input = (String) JOptionPane.showInputDialog(null, "if you want solo play. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
+    if(input.equals("YES")){
+      solo = true;
+    }
+    if(!solo){
+      socketInitWithPane();
+    }
+  }
+
+  private void socketInitWithPane(){
+    mySocket = new OmokSocket();
+    String input = (String) JOptionPane.showInputDialog(null, "if you want to be a host. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
     if(input.equals("YES")){
       String portNum = JOptionPane.showInputDialog("Enter portNum");
       mySocket.beServer(Integer.parseInt(portNum));
       myTurn = true;
     }
     else{
-    	String ipNum = JOptionPane.showInputDialog("Enter ServerIP");
+      String ipNum = JOptionPane.showInputDialog("Enter ServerIP");
       String portNum = JOptionPane.showInputDialog("Enter portNum");
       mySocket.beClient(ipNum, Integer.parseInt(portNum));
       myTurn = false;
     }
-//----------------------------------------------------------------------should ve upgrade
   }
 
-	private void dataInit(int ver, int hor){
+  private void socketInit(boolean host, int portNum, String ipNum){
+    mySocket = new OmokSocket();
+    if(host){
+      mySocket.beServer(portNum);
+      myTurn = true;
+    }
+    else{
+      mySocket.beClient(ipNum, portNum);
+      myTurn = false;
+    }
+  }
+
+
+
+	private void dataInit(int lineNum){
 		end = false;
 		turn = 1;
-		board = new int[ver+2][hor+2];
-		for(int i = 1; i <= ver; i++){
-			for(int j = 1; j<= hor; j++){
+		board = new int[lineNum+2][lineNum+2];
+		for(int i = 1; i <= lineNum; i++){
+			for(int j = 1; j<= lineNum; j++){
 				board[i][j] = 0;
 			}
 		}
-	    for (int i = 0; i < ver; i++){
-	    	board[0][i] = 4;
-	    	board[ver + 1][i] = 4;
-	    }
-	    for (int i = 0; i <hor; i++){
-	    	board[i][0] = 3;
-	    	board[i][hor + 1] = 3;
-	    }
+	  for (int i = 0; i < lineNum; i++){
+	    board[0][i] = 4;
+	    board[lineNum + 1][i] = 4;
+	  }
+	  for (int i = 0; i <lineNum; i++){
+    	board[i][0] = 3;
+	    board[i][lineNum + 1] = 3;
+	  }
 	}
 
 	public void put(int x, int y){
