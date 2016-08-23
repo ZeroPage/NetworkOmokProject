@@ -2,6 +2,7 @@ package omok;
 
 import java.io.IOException;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class OmokGame {
   protected OmokSocket mySocket;
@@ -12,39 +13,36 @@ public class OmokGame {
 	protected int turn;
   public boolean myTurn;
   public boolean solo;
+  private static final String[] answer = {"YES", "NO"};
 
-  public OmokGame(){
-	   dataInit(19,19);
-     System.out.println("if you want solo play. just enter 1. otherwise enter the other key");
-     Scanner input = new Scanner(System.in);
-     if(input.nextInt() == 1){
+  public OmokGame(int lineNum){
+	   dataInit(lineNum,lineNum);
+     String input = (String) JOptionPane.showInputDialog(null, "if you want solo play. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
+     if(input.equals("YES")){
        solo = true;
      }
      if(!solo){
        socketInit();
      }
-     gameGui = new OmokGui(19, this);
+     gameGui = new OmokGui(lineNum, this);
      if(!solo && !myTurn){
        otherPut();
      }
    }
    private void socketInit(){
-     Scanner input = new Scanner(System.in);
      mySocket = new OmokSocket();
+     String input = (String) JOptionPane.showInputDialog(null, "if you want to be a host. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
 //------------------------------------------------------------------------ should be upgrade
-    System.out.println("if you want to be a host. just enter 1. otherwise enter the other key");
-    if(input.nextInt() == 1){
-      System.out.println("Enter port Number");
-      mySocket.beServer(input.nextInt());
+
+    if(input.equals("YES")){
+      String portNum = JOptionPane.showInputDialog("Enter portNum");
+      mySocket.beServer(Integer.parseInt(portNum));
       myTurn = true;
     }
     else{
-    	input = new Scanner(System.in);
-      System.out.println("Enter ServerIP");
-      String ipNum = input.nextLine();
-      System.out.println("Enter portNum");
-      int portNum = input.nextInt();
-      mySocket.beClient(ipNum, portNum);
+    	String ipNum = JOptionPane.showInputDialog("Enter ServerIP");
+      String portNum = JOptionPane.showInputDialog("Enter portNum");
+      mySocket.beClient(ipNum, Integer.parseInt(portNum));
       myTurn = false;
     }
 //----------------------------------------------------------------------should ve upgrade
