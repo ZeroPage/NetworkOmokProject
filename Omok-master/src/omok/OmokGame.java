@@ -40,7 +40,7 @@ public class OmokGame {
   }
 
   private void baseSettingsWithPane(){
-    String input = (String) JOptionPane.showInputDialog(null, "if you want solo play. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
+    String input = (String) JOptionPane.showInputDialog(null, "Do you want solo play?", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
     if(input.equals("YES")){
       solo = true;
     }
@@ -51,7 +51,7 @@ public class OmokGame {
 
   private void socketInitWithPane(){
     mySocket = new OmokSocket();
-    String input = (String) JOptionPane.showInputDialog(null, "if you want to be a host. just enter 1. otherwise enter the other key", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
+    String input = (String) JOptionPane.showInputDialog(null, "Do you want to be a host.", "Input", JOptionPane.QUESTION_MESSAGE, null, answer, answer[0]);
     if(input.equals("YES")){
       String portNum = JOptionPane.showInputDialog("Enter portNum");
       mySocket.beServer(Integer.parseInt(portNum));
