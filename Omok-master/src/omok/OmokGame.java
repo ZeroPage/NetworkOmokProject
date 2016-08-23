@@ -17,7 +17,11 @@ public class OmokGame {
 
   public OmokGame(int lineNum){
 	   dataInit(lineNum,lineNum);
-     baseSetting();
+     baseSettings();
+     gameGui = new OmokGui(lineNum, this);
+     if(!solo && !myTurn){
+       otherPut();
+     }
    }
 
    private void baseSettings(){
@@ -27,10 +31,6 @@ public class OmokGame {
      }
      if(!solo){
        socketInit();
-     }
-     gameGui = new OmokGui(lineNum, this);
-     if(!solo && !myTurn){
-       otherPut();
      }
    }
 
