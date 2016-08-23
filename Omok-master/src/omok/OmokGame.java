@@ -13,27 +13,34 @@ public class OmokGame {
 	protected int turn;
   public boolean myTurn;
   public boolean solo;
+  public boolean start;
   private static final String[] answer = {"YES", "NO"};
 
   public OmokGame(int lineNum){//for now with Pane
+    start = false;
 	  dataInit(lineNum);
-    baseSettingsWithPane();
     gameGui = new OmokGui(lineNum, this);
+    baseSettingsWithPane();
+    start = true;
     if(!solo && !myTurn){
       otherPut();
     }
   }
 
   public OmokGame(int lineNum, boolean solo){//for future solo mode
+    start = false;
 	  dataInit(lineNum);
     this.solo = solo;
     gameGui = new OmokGui(lineNum, this);
+    start = true;
   }
 
   public OmokGame(int lineNum, boolean host, int portNum, String ipNum){//for future multimode
+    start = false;
     dataInit(lineNum);
     socketInit(host, portNum, ipNum);
     gameGui = new OmokGui(lineNum, this);
+    start = true;
     if(!solo && !myTurn){
       otherPut();
     }
